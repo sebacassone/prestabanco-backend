@@ -1,13 +1,12 @@
-version: "3.8"
 services:
   postgres:
     image: postgres:12-bullseye
     restart: always
     # command: -c ssl=on -c ssl_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem -c ssl_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123admin
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       PGDATA: /var/lib/postgresql/data
     volumes:
       - ./data:/var/lib/postgresql/data
@@ -18,8 +17,8 @@ services:
     image: elestio/pgadmin
     restart: always
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@usach.cl
-      PGADMIN_DEFAULT_PASSWORD: 123admin
+      PGADMIN_DEFAULT_EMAIL: ${PDADMIN_USER}
+      PGADMIN_DEFAULT_PASSWORD: ${PDADMIN_PASSWORD}
       PGADMIN_LISTEN_PORT: 8080
     ports:
       - "8080:8080"

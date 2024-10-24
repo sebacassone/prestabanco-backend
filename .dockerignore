@@ -1,0 +1,11 @@
+### Ignora .md, .gradle, .idea
+*.md
+.gradle/
+.idea/
+.vscode/
+.gitignore
+.git/
+
+data/
+servers.json/
+.env
