@@ -1,7 +1,7 @@
 package cl.prestabanco.api.controllers;
 
-import cl.prestabanco.api.models.UserEntity;
-import cl.prestabanco.api.services.UserService;
+import cl.prestabanco.api.models.UsersEntity;
+import cl.prestabanco.api.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/v1/user")
 @CrossOrigin("*")
-public class UserController {
+public class UsersController {
     @Autowired
-    private UserService userService;
+    private UsersService usersService;
 
     @PostMapping("/registrar-usuario")
-    public ResponseEntity<UserEntity> registerUser(@RequestBody UserEntity user) {
+    public ResponseEntity<UsersEntity> registerUser(@RequestBody UsersEntity user) {
         try {
             // the user is saved in database
-            UserEntity response = userService.saveUser(user);
+            UsersEntity response = usersService.saveUser(user);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
