@@ -19,29 +19,31 @@ public class UsersEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_user;
+    private Long idUser;
     @Column(unique = true, nullable = false)
-    private String rut_user;
+    private String rutUser;
     @Column(nullable = false)
-    private String name_user;
+    private String nameUser;
     @Column(nullable = false)
-    private String first_lastname_user;
+    private String firstLastnameUser;
     @Column(nullable = false)
-    private String second_lastname_user;
+    private String secondLastnameUser;
     @Column(nullable = false)
-    private String email_user;
+    private String emailUser;
     @Column(nullable = false)
-    private String phone_user;
+    private String phoneUser;
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date birthday_user;
+    private Date birthdayUser;
     @Column(nullable = false)
-    private String status_user;
+    private String statusUser;
     @Column(nullable = false)
-    private String type_user;
+    private String passwordUser;
+    @Column(nullable = false)
+    private String typeUser;
     // Foreign Key
-    @ManyToOne
-    @JoinColumn(name = "id_address")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idAddress")
     @JsonIgnore
-    private AddressesEntity address_user;
+    private AddressesEntity addressUser;
 }

@@ -17,27 +17,26 @@ public class LoansEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_loan;
+    private Long idLoan;
     @Column(nullable = false)
-    private Float amount_loan;
-    @Column(nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date date_concession;
-    @Column(nullable = false)
-    private String type_loan;
+    private Integer amountLoan;
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date expiration_date_loan;
+    private Date dateConcession;
     @Column(nullable = false)
-    private Float quota_loan;
+    private String typeLoan;
     @Column(nullable = false)
-    private String state_loan;
+    private Integer numberOfPaymentsLoan;
     @Column(nullable = false)
-    private Float interest_loan;
+    private Float quotaLoan;
     @Column(nullable = false)
-    private Float administration_amount_loan;
+    private String stateLoan;
     @Column(nullable = false)
-    private Float total_amount_loan;
+    private Float interestLoan;
     @Column(nullable = false)
-    private Float secure_amount_loan;
+    private Float administrationAmountLoan;
+    @Column(nullable = false)
+    private Float totalAmountLoan;
+    @Column(nullable = false)
+    private Float secureAmountLoan;
 }

@@ -19,23 +19,16 @@ public class DocumentsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_document;
+    private Long idDocument;
     @Column(nullable = false)
-    private String url_document;
+    private String urlDocument;
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date upload_date_document;
+    private Date uploadDateDocument;
 
     // Foreign Key
     @JsonIgnore
-    @ManyToMany(cascade = {
-            CascadeType.MERGE,
-            CascadeType.PERSIST
-    })
-    @JoinTable(
-            name = "requests_documents",
-            joinColumns = {@JoinColumn(name="id_request")},
-            inverseJoinColumns = {@JoinColumn(name="id_document")}
-    )
-    private List<RequestsEntity> requests_document;
+    @ManyToOne
+    @JoinColumn(name = "idRequest")
+    private RequestsEntity requestsDocument;
 }

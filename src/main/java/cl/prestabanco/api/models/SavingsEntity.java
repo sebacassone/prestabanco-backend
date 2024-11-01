@@ -17,17 +17,17 @@ public class SavingsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_saving;
+    private Long idSaving;
     @Column(nullable = false)
-    private Float balance_saving;
+    private Float balanceSaving;
     @Column(nullable = false)
-    private String state_saving;
+    private String stateSaving;
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date seniority_account_saving;
+    private Date seniorityAccountSaving;
 
     // Foreign Key
     @OneToOne
-    @JoinColumn(name = "id_user")
-    private UsersEntity user_saving;
+    @JoinColumn(name = "idUser")
+    private UsersEntity userSaving;
 }

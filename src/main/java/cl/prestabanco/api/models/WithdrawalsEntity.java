@@ -16,14 +16,14 @@ public class WithdrawalsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_withdrawal;
+    private Long idWithdrawal;
     @Column(nullable = false)
-    private Float amount_withdrawal;
+    private Float amountWithdrawal;
     @Column(nullable = false)
-    private Date date_withdrawal;
+    private Date dateWithdrawal;
 
     // Foreign Key
     @ManyToOne
-    @JoinColumn(name = "id_saving")
-    private SavingsEntity saving_withdrawal;
+    @JoinColumn(name = "idSaving")
+    private SavingsEntity savingWithdrawal;
 }

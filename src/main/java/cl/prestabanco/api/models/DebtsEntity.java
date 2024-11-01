@@ -18,21 +18,21 @@ public class DebtsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_debt;
+    private Long idDebt;
     @Column(nullable = false)
-    private Float amount_debt;
+    private Float amountDebt;
     @Column(nullable = false)
-    private String type_debt;
+    private String typeDebt;
     @Column(nullable = false)
-    private String creditor_debt;
+    private String creditorDebt;
     @Column(nullable = false)
-    private String state_debt;
+    private String stateDebt;
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date expiration_date_debt;
+    private Date expirationDateDebt;
     // Foreign Key
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "idUser")
     @JsonIgnore
-    private UsersEntity user_debt;
+    private UsersEntity userDebt;
 }

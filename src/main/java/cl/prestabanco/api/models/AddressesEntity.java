@@ -16,16 +16,16 @@ public class AddressesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_address;
+    private Long idAddress;
     @Column(nullable = false)
-    private String street_address;
+    private String streetAddress;
     @Column(nullable = false)
-    private Integer number_address;
+    private Integer numberAddress;
     @Column(nullable = false)
-    private String commune_address;
+    private String communeAddress;
     @Column(nullable = false)
-    private String region_address;
+    private String regionAddress;
     @Column(nullable = false)
-    private String country_address;
+    private String countryAddress;
 
 }

@@ -16,14 +16,14 @@ public class DepositsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_deposit;
+    private Long idDeposit;
     @Column(nullable = false)
-    private Float amount_deposit;
+    private Float amountDeposit;
     @Column(nullable = false)
-    private Date date_deposit;
+    private Date dateDeposit;
 
     // Foreign Key
     @ManyToOne
-    @JoinColumn(name = "id_saving")
-    private SavingsEntity saving_deposit;
+    @JoinColumn(name = "idSaving")
+    private SavingsEntity savingDeposit;
 }

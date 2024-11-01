@@ -17,15 +17,15 @@ public class JobsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_job;
+    private Long idJob;
     @Column(nullable = false)
-    private String type_job;
+    private String typeJob;
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date seniority_job;
+    private Date seniorityJob;
 
     // Foreign Key
     @ManyToOne
-    @JoinColumn(name = "id_user")
-    private UsersEntity user_job;
+    @JoinColumn(name = "idUser")
+    private UsersEntity userJob;
 }

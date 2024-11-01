@@ -17,23 +17,20 @@ public class RequestsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_request;
+    private Long idRequest;
     @Column(nullable = false)
-    private String type_request;
+    private String typeRequest;
     @Column(nullable = false)
-    private String state_request;
+    private String stateRequest;
 
     // Foreign Key
     @OneToOne
-    @JoinColumn(name = "id_lean")
+    @JoinColumn(name = "idLean")
     @JsonIgnore
-    private LoansEntity lean_request;
+    private LoansEntity leanRequest;
     @ManyToOne
-    @JoinColumn(name = "id_user")
+    @JoinColumn(name = "idUser")
     @JsonIgnore
-    private UsersEntity user_request;
-    @ManyToMany(mappedBy = "requests_document")
-    @JsonIgnore
-    private List<DocumentsEntity> documents_request;
+    private UsersEntity userRequest;
 
 }

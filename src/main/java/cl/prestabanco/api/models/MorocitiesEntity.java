@@ -18,16 +18,16 @@ public class MorocitiesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, unique = true)
-    private Long id_morocity;
+    private Long idMorocity;
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date date_start_morocity;
+    private Date dateStartMorocity;
     @Column(nullable = false)
-    private Float amount_overdue_morocity;
+    private Float amountOverdueMorocity;
 
     // Foreign Key
     @ManyToOne
-    @JoinColumn(name = "id_debt")
+    @JoinColumn(name = "idDebt")
     @JsonIgnore
-    private DebtsEntity debt_morocity;
+    private DebtsEntity debtMorocity;
 }

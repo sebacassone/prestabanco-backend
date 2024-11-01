@@ -16,14 +16,14 @@ public class IncomesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id_income;
+    private Long idIncome;
     @Column(nullable = false)
-    private Float amount_income;
+    private Float amountIncome;
     @Column(nullable = false)
-    private Date date_income;
+    private Date dateIncome;
 
     // Foreign Key
     @ManyToOne
     @JoinColumn(name = "id_job")
-    private JobsEntity job_income;
+    private JobsEntity jobIncome;
 }
