@@ -16,7 +16,7 @@ public class IncomesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idIncome;
+    private Integer idIncome;
     @Column(nullable = false)
     private Float amountIncome;
     @Column(nullable = false)

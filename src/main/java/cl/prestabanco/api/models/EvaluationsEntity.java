@@ -5,26 +5,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "addresses")
+@Table(name = "evaluations")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressesEntity {
+public class EvaluationsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
-    private Integer idAddress;
+    private Integer idEvaluation;
     @Column(nullable = false)
-    private String streetAddress;
+    private Boolean quotaIncomeRatio;
     @Column(nullable = false)
-    private Integer numberAddress;
+    private Boolean customerCredit;
     @Column(nullable = false)
-    private String communeAddress;
+    private Boolean seniorityEvaluation;
     @Column(nullable = false)
-    private String regionAddress;
+    private Boolean debtIncomeRatio;
     @Column(nullable = false)
-    private String countryAddress;
+    private Boolean maximumFinancingAmount;
+    @Column(nullable = false)
+    private Boolean ageApplicant;
 }

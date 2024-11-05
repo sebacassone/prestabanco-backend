@@ -19,7 +19,7 @@ public class DocumentsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idDocument;
+    private Integer idDocument;
     @Column(nullable = false)
     private String urlDocument;
     @Column(nullable = false)

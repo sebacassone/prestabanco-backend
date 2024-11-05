@@ -17,7 +17,7 @@ public class SavingsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idSaving;
+    private Integer idSaving;
     @Column(nullable = false)
     private Float balanceSaving;
     @Column(nullable = false)

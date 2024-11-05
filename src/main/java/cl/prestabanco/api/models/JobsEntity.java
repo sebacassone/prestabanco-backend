@@ -17,7 +17,7 @@ public class JobsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idJob;
+    private Integer idJob;
     @Column(nullable = false)
     private String typeJob;
     @Column(nullable = false)

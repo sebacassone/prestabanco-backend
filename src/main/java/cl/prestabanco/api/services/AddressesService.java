@@ -5,15 +5,20 @@ import cl.prestabanco.api.repositories.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class AddressesService {
+    private final AddressRepository addressRepository;
+
     @Autowired
-    private AddressRepository addressRepository;
+    public AddressesService(AddressRepository addressRepository) {
+        this.addressRepository = addressRepository;
+    }
 
     public AddressesEntity findAddressAndSave(AddressesEntity address) {
         if (address == null) {
+            return null;
+        }
+        if (address.getStreetAddress() == null || address.getNumberAddress() == null || address.getCommuneAddress() == null || address.getRegionAddress() == null || address.getCountryAddress() == null) {
             return null;
         }
 
@@ -32,8 +37,8 @@ public class AddressesService {
         return addressEntity;
     }
 
-    public AddressesEntity findAddressAndSave(Long idAddress) {
-        if (idAddress == null) {
+    public AddressesEntity findAddressAndSave(Integer idAddress) {
+        if (idAddress == null || idAddress == 0 || idAddress < 0) {
             return null;
         }
 

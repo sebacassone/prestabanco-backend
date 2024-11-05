@@ -23,7 +23,7 @@ public class JobsController {
             JobsEntity response = jobsService.saveJob(
                     (String) jsonMap.get("typeJob"),
                     (String) jsonMap.get("seniorityJob"),
-                    jsonMap.get("userJob")
+                    (Integer) jsonMap.get("userJob")
             );
             return ResponseEntity.ok(response);
         } catch (Exception e) {

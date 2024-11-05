@@ -26,7 +26,7 @@ public class IncomesController {
                     return incomesService.saveIncomes(
                             jsonMap.get("amountIncome"),
                             (String) jsonMap.get("dateIncome"),
-                            jsonMap.get("jobIncome")
+                            (Integer) jsonMap.get("jobIncome")
                     );
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -34,6 +34,17 @@ public class IncomesController {
                 }
             }).collect(Collectors.toList());
             return ResponseEntity.ok(responseList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/avarage-salary/{idUser}")
+    public ResponseEntity<Float> getAvarageSalary(@PathVariable Integer idUser) {
+        try {
+            Float response = incomesService.avarageSalary(idUser);
+            return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

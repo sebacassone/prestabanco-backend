@@ -23,10 +23,10 @@ public class RequestsController {
             System.out.println("Request: " + jsonMap);
             // the request is saved in database
             RequestsEntity response = requestsService.saveRequest(
-                    (String) jsonMap.get("typeRequest"),
                     (String) jsonMap.get("stateRequest"),
-                    jsonMap.get("leanRequest"),
-                    jsonMap.get("userRequest")
+                    (Integer) jsonMap.get("leanRequest"),
+                    (Integer) jsonMap.get("userRequest"),
+                    (Integer) jsonMap.get("evaluationRequest")
             );
 
             return ResponseEntity.ok(response);

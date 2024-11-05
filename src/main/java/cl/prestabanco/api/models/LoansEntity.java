@@ -17,7 +17,7 @@ public class LoansEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idLoan;
+    private Integer idLoan;
     @Column(nullable = false)
     private Integer amountLoan;
     @Column(nullable = false)
@@ -39,4 +39,6 @@ public class LoansEntity {
     private Float totalAmountLoan;
     @Column(nullable = false)
     private Float secureAmountLoan;
+    @Column(nullable = false)
+    private Float maximumAmountLoan; // as a percentage
 }

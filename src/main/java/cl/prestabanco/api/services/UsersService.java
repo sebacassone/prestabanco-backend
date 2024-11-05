@@ -6,18 +6,22 @@ import cl.prestabanco.api.utils.functions.functions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 @Service
 public class UsersService {
+    private final UsersRepository usersRepository;
+    private final AddressesService addressesService;
     @Autowired
-    private UsersRepository usersRepository;
-    @Autowired
-    private AddressesService addressesService;
+    public UsersService(UsersRepository usersRepository, AddressesService addressesService) {
+        this.usersRepository = usersRepository;
+        this.addressesService = addressesService;
+    }
 
-    public UsersEntity saveUser(String rut, String nameUser, String firstLastnameUser, String secondLastnameUser, String emailUser, String phoneUser, String birthdayUser, String statusUser, String passwordUser, String typeUser, Object idAddress) {
+    public UsersEntity saveUser(String rut, String nameUser, String firstLastnameUser, String secondLastnameUser, String emailUser, String phoneUser, String birthdayUser, String statusUser, String passwordUser, String typeUser, Integer idAddress) {
+        if (rut == null || nameUser == null || firstLastnameUser == null || secondLastnameUser == null || emailUser == null || phoneUser == null || birthdayUser == null || statusUser == null || passwordUser == null || typeUser == null || idAddress == null) {
+            return null;
+        } else if (rut.isEmpty() || nameUser.isEmpty() || firstLastnameUser.isEmpty() || secondLastnameUser.isEmpty() || emailUser.isEmpty() || phoneUser.isEmpty() || birthdayUser.isEmpty() || statusUser.isEmpty() || passwordUser.isEmpty() || typeUser.isEmpty() || idAddress <= 0) {
+            return null;
+        }
         // Create a user object
         UsersEntity user = new UsersEntity();
         user.setRutUser(rut);
@@ -30,18 +34,22 @@ public class UsersService {
         user.setStatusUser(statusUser);
         user.setPasswordUser(passwordUser);
         user.setTypeUser(typeUser);
-        user.setAddressUser(addressesService.findAddressAndSave(functions.transformLong(idAddress)));
+        user.setAddressUser(addressesService.findAddressAndSave(idAddress));
 
-        System.out.println("User: " + user);
         return usersRepository.save(user);
 
     }
 
-    public UsersEntity findUser(Long idUser) {
+    public UsersEntity findUser(Integer idUser) {
         return usersRepository.findById(idUser).orElse(null);
     }
 
     public UsersEntity login(String rutUser, String passwordUser) {
+        if (rutUser == null || passwordUser == null) {
+            return null;
+        } else if (rutUser.isEmpty() || passwordUser.isEmpty()) {
+            return null;
+        }
         return usersRepository.findByRutUserAndPasswordUser(rutUser, passwordUser);
     }
 }

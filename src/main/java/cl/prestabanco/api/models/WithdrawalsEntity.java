@@ -16,7 +16,7 @@ public class WithdrawalsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idWithdrawal;
+    private Integer idWithdrawal;
     @Column(nullable = false)
     private Float amountWithdrawal;
     @Column(nullable = false)

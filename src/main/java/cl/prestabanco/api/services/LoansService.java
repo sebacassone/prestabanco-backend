@@ -7,34 +7,43 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LoansService {
+    private final LoansRepository loansRepository;
     @Autowired
-    private LoansRepository loansRepository;
+    public LoansService(LoansRepository loansRepository) {
+        this.loansRepository = loansRepository;
+    }
 
     private static Double calculateQuota(Integer amount, Float interestRate, Integer numberOfPayments) {
         double monthlyRate = interestRate / 12;
-        double quota = amount * (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
-        return quota;
+        return amount * (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
     }
 
     public LoansEntity calculateLoan(LoansEntity loan) {
-        System.out.println(loan);
         // variables are extracted
         Integer amount = loan.getAmountLoan();
         Float interestRate;
         Integer numberOfPayments = loan.getNumberOfPaymentsLoan();
         String typeLoan = loan.getTypeLoan();
-        // Select the interest rate according to the type of loan
-        if (typeLoan.equals("Primera Vivienda")) {
-            interestRate = 0.035f;
-        } else if (typeLoan.equals("Segunda Vivienda")) {
-            interestRate = 0.04f;
-        } else if (typeLoan.equals("Propiedades Comerciales")) {
-            interestRate = 0.05f;
-        } else if (typeLoan.equals("Remodalación")){
-            interestRate = 0.045f;
-        } else {
-            interestRate = 0.00f;
+
+        if (amount == null || numberOfPayments == null || typeLoan == null) {
+            return null;
+        } else if (amount <= 0 || numberOfPayments <= 0) {
+            return null;
         }
+
+        // Select the interest rate according to the type of loan
+        interestRate = switch (typeLoan) {
+            case "Primera Vivienda" -> 0.035f;
+            case "Segunda Vivienda" -> 0.04f;
+            case "Propiedades Comerciales" -> 0.05f;
+            case "Remodalación" -> 0.045f;
+            default -> 0.00f;
+        };
+
+        if (interestRate == 0.00f) {
+            return null;
+        }
+
         // Calculate the monthly fee
         Double quoata = calculateQuota(amount, interestRate, numberOfPayments);
         System.out.println(quoata);
@@ -51,11 +60,14 @@ public class LoansService {
         return loan;
     }
 
-    public LoansEntity findLoan(Long idLoan) {
+    public LoansEntity findLoan(Integer idLoan) {
         return loansRepository.findById(idLoan).orElse(null);
     }
 
     public LoansEntity saveLoan(LoansEntity loan) {
+        if (loan == null) {
+            return null;
+        }
         return loansRepository.save(loan);
     }
 }

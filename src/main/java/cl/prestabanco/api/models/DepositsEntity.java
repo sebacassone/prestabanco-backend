@@ -16,7 +16,7 @@ public class DepositsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idDeposit;
+    private Integer idDeposit;
     @Column(nullable = false)
     private Float amountDeposit;
     @Column(nullable = false)

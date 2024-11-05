@@ -17,9 +17,7 @@ public class RequestsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idRequest;
-    @Column(nullable = false)
-    private String typeRequest;
+    private Integer idRequest;
     @Column(nullable = false)
     private String stateRequest;
 
@@ -32,5 +30,8 @@ public class RequestsEntity {
     @JoinColumn(name = "idUser")
     @JsonIgnore
     private UsersEntity userRequest;
-
+    @OneToOne
+    @JoinColumn(name = "idEvaluation")
+    @JsonIgnore
+    private EvaluationsEntity evaluationRequest;
 }

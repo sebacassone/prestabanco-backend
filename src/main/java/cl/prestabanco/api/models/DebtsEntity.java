@@ -18,7 +18,7 @@ public class DebtsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long idDebt;
+    private Integer idDebt;
     @Column(nullable = false)
     private Float amountDebt;
     @Column(nullable = false)

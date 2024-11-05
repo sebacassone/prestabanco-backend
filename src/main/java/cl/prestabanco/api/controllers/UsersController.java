@@ -32,7 +32,7 @@ public class UsersController {
                     (String) jsonMap.get("statusUser"),
                     (String) jsonMap.get("passwordUser"),
                     (String) jsonMap.get("typeUser"),
-                    jsonMap.get("idAddress")
+                    (Integer) jsonMap.get("idAddress")
             );
 
             return ResponseEntity.ok(response);
