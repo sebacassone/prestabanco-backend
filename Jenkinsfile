@@ -2,13 +2,10 @@ pipeline {
     agent any
 
     environment {
-        GITHUB_REPO = 'https://github.com/sebacassone/prestabanco-frontend'
+        GITHUB_REPO = 'https://github.com/sebacassone/prestabanco-backend'
         GITHUB_BRANCH = 'main'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         DOCKER_IMAGE = 'sebacassone/prestabanco-frontend'
-        VITE_PAYROLL_BACKEND_SERVER = 'nginx'
-        VITE_PAYROLL_BACKEND_PORT = '8000'
-        PUBLIC_URL = 'nginx'
         DB_HOST = 'postgres:5432'
         DB_NAME = 'presta_banco'
         DB_USERNAME = 'postgres'
@@ -18,17 +15,34 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout([$class: 'GitSCM',
-                          branches: [[name: "*/${GITHUB_BRANCH}"]],
+                checkout([$class: 'GitSCM', 
+                          branches: [[name: "*/${GITHUB_BRANCH}"]], 
                           userRemoteConfigs: [[url: "${GITHUB_REPO}"]]])
+            }
+        }
+
+        stage('Setup Environment') {
+            steps {
+                script {
+                    // Crear archivo .env con las variables de entorno necesarias
+                    writeFile file: '.env', text: """
+                    DB_HOST=${DB_HOST}
+                    DB_NAME=${DB_NAME}
+                    DB_USERNAME=${DB_USERNAME}
+                    DB_PASSWORD=${DB_PASSWORD}
+                    """
+                }
             }
         }
 
         stage('Build and Test') {
             steps {
                 script {
-                    // Construir el proyecto y ejecutar pruebas unitarias usando Gradle
-                    sh './gradlew clean build'
+                    // Exportar las variables de entorno y ejecutar las pruebas unitarias con Gradle
+                    sh '''
+                        export $(cat .env | xargs)
+                        ./gradlew clean build
+                    '''
                 }
             }
         }
@@ -39,9 +53,6 @@ pipeline {
                     // Construir la imagen Docker con las variables de entorno
                     sh '''
                         docker build \
-                        --build-arg VITE_PAYROLL_BACKEND_SERVER=$VITE_PAYROLL_BACKEND_SERVER \
-                        --build-arg VITE_PAYROLL_BACKEND_PORT=$VITE_PAYROLL_BACKEND_PORT \
-                        --build-arg PUBLIC_URL=$PUBLIC_URL \
                         --build-arg DB_HOST=$DB_HOST \
                         --build-arg DB_NAME=$DB_NAME \
                         --build-arg DB_USERNAME=$DB_USERNAME \
