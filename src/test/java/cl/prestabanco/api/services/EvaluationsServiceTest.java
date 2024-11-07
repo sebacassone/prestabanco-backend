@@ -21,6 +21,21 @@ public class EvaluationsServiceTest {
     @Mock
     private EvaluationsRepository evaluationsRepository;
 
+    @Mock
+    private IncomesService incomesService;
+
+    @Mock
+    private DebtsService debtsService;
+
+    @Mock
+    private JobsService jobsService;
+
+    @Mock
+    private LoansService loansService;
+
+    @Mock
+    private UsersService usersService;
+
     @InjectMocks
     private EvaluationsService evaluationsService;
 
@@ -174,6 +189,239 @@ public class EvaluationsServiceTest {
 
         // Then
         assertThat(result).isNull();
+    }
+
+    @Test
+    void whenAverageSalaryIsZero_thenReturnNull() {
+        // Given
+        Integer idUser = 1;
+        Float quotaLoan = 1000f;
+        Float maximumAmountPercentage = 50f;
+        String typeLoan = "Primera Vivienda";
+
+        // When
+        when(incomesService.avarageSalary(idUser)).thenReturn(0f);
+        EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenQuotaIncomeRatioIsGreaterThan35_thenSetQuotaIncomeRatioFalse() {
+        // Given
+        Integer idUser = 1;
+        Float quotaLoan = 5000f;
+        Float maximumAmountPercentage = 50f;
+        String typeLoan = "Primera Vivienda";
+        Float averageSalary = 10000f;
+
+        // When
+        when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
+        when(debtsService.hasUnpaidDebtsOrMorocities(idUser)).thenReturn(false);
+        when(jobsService.hasSeniority(idUser)).thenReturn(true);
+        when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
+        when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
+        when(usersService.applicantsAge(idUser)).thenReturn(true);
+
+        EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
+
+        // Then
+        assertThat(result.getQuotaIncomeRatio()).isFalse();
+    }
+
+    @Test
+    void whenQuotaIncomeRatioIsLessThanOrEqualTo35_thenSetQuotaIncomeRatioTrue() {
+        // Given
+        Integer idUser = 1;
+        Float quotaLoan = 3500f;
+        Float maximumAmountPercentage = 50f;
+        String typeLoan = "Primera Vivienda";
+        Float averageSalary = 10000f;
+
+        // When
+        when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
+        when(debtsService.hasUnpaidDebtsOrMorocities(idUser)).thenReturn(false);
+        when(jobsService.hasSeniority(idUser)).thenReturn(true);
+        when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
+        when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
+        when(usersService.applicantsAge(idUser)).thenReturn(true);
+
+        EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
+
+        // Then
+        assertThat(result.getQuotaIncomeRatio()).isTrue();
+    }
+
+    @Test
+    void whenHasUnpaidDebtsOrMorocities_thenSetCustomerCreditFalse() {
+        // Given
+        Integer idUser = 1;
+        Float quotaLoan = 3500f;
+        Float maximumAmountPercentage = 50f;
+        String typeLoan = "Segunda Vivienda";
+        Float averageSalary = 10000f;
+
+        // When
+        when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
+        when(debtsService.hasUnpaidDebtsOrMorocities(idUser)).thenReturn(true);
+        when(jobsService.hasSeniority(idUser)).thenReturn(true);
+        when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
+        when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
+        when(usersService.applicantsAge(idUser)).thenReturn(true);
+
+        EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
+
+        // Then
+        assertThat(result.getCustomerCredit()).isFalse();
+    }
+
+    @Test
+    void whenHasSeniority_thenSetSeniorityEvaluationTrue() {
+        // Given
+        Integer idUser = 1;
+        Float quotaLoan = 3500f;
+        Float maximumAmountPercentage = 50f;
+        String typeLoan = "Propiedades Comerciales";
+        Float averageSalary = 10000f;
+
+        // When
+        when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
+        when(debtsService.hasUnpaidDebtsOrMorocities(idUser)).thenReturn(false);
+        when(jobsService.hasSeniority(idUser)).thenReturn(true);
+        when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
+        when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
+        when(usersService.applicantsAge(idUser)).thenReturn(true);
+
+        EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
+
+        // Then
+        assertThat(result.getSeniorityEvaluation()).isTrue();
+    }
+
+    @Test
+    void whenRelationDebtsIncomeTrue_thenSetDebtIncomeRatioTrue() {
+        // Given
+        Integer idUser = 1;
+        Float quotaLoan = 3500f;
+        Float maximumAmountPercentage = 50f;
+        String typeLoan = "Remodelación";
+        Float averageSalary = 10000f;
+
+        // When
+        when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
+        when(debtsService.hasUnpaidDebtsOrMorocities(idUser)).thenReturn(false);
+        when(jobsService.hasSeniority(idUser)).thenReturn(true);
+        when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
+        when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
+        when(usersService.applicantsAge(idUser)).thenReturn(true);
+
+        EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
+
+        // Then
+        assertThat(result.getDebtIncomeRatio()).isTrue();
+    }
+
+    @Test
+    void whenMaximumFinancingAmountFalse_thenSetMaximumFinancingAmountFalse() {
+        // Given
+        Integer idUser = 1;
+        Float quotaLoan = 3500f;
+        Float maximumAmountPercentage = 50f;
+        String typeLoan = "Segunda Vivienda";
+        Float averageSalary = 10000f;
+
+        // When
+        when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
+        when(debtsService.hasUnpaidDebtsOrMorocities(idUser)).thenReturn(false);
+        when(jobsService.hasSeniority(idUser)).thenReturn(true);
+        when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
+        when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(false);
+        when(usersService.applicantsAge(idUser)).thenReturn(true);
+
+        EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
+
+        // Then
+        assertThat(result.getMaximumFinancingAmount()).isFalse();
+    }
+
+    @Test
+    void whenApplicantsAgeFalse_thenSetAgeApplicantFalse() {
+        // Given
+        Integer idUser = 1;
+        Float quotaLoan = 3500f;
+        Float maximumAmountPercentage = 50f;
+        String typeLoan = "Propiedades Comerciales";
+        Float averageSalary = 10000f;
+
+        // When
+        when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
+        when(debtsService.hasUnpaidDebtsOrMorocities(idUser)).thenReturn(false);
+        when(jobsService.hasSeniority(idUser)).thenReturn(true);
+        when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
+        when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
+        when(usersService.applicantsAge(idUser)).thenReturn(false);
+
+        EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
+
+        // Then
+        assertThat(result.getAgeApplicant()).isFalse();
+    }
+
+    @Test
+    void whenAllConditionsAreMet_thenReturnEvaluation() {
+        // Given
+        Integer idUser = 1;
+        Float quotaLoan = 3500f;
+        Float maximumAmountPercentage = 50f;
+        String typeLoan = "Primera Vivienda";
+        Float averageSalary = 10000f;
+
+        // When
+        when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
+        when(debtsService.hasUnpaidDebtsOrMorocities(idUser)).thenReturn(false);
+        when(jobsService.hasSeniority(idUser)).thenReturn(true);
+        when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
+        when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
+        when(usersService.applicantsAge(idUser)).thenReturn(true);
+
+        EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.getQuotaIncomeRatio()).isTrue();
+        assertThat(result.getCustomerCredit()).isTrue();
+        assertThat(result.getSeniorityEvaluation()).isTrue();
+        assertThat(result.getDebtIncomeRatio()).isTrue();
+        assertThat(result.getMaximumFinancingAmount()).isTrue();
+        assertThat(result.getAgeApplicant()).isTrue();
+    }
+
+    @Test
+    void whenEvaluationIsNullSave_thenReturnNull() {
+        // Given
+
+        // When
+        EvaluationsEntity result = evaluationsService.saveEvaluation(null);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenEvaluationIsNotNull_thenSaveAndReturnEvaluation() {
+        // Given
+        EvaluationsEntity evaluation = new EvaluationsEntity();
+        evaluation.setIdEvaluation(1);
+
+        // When
+        when(evaluationsRepository.save(evaluation)).thenReturn(evaluation);
+        EvaluationsEntity result = evaluationsService.saveEvaluation(evaluation);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.getIdEvaluation()).isEqualTo(1);
+        verify(evaluationsRepository, times(1)).save(evaluation);
     }
 }
 

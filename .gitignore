@@ -40,3 +40,5 @@ out/
 data
 /servers.json
 .env
+jenkins_home/
+gradle/

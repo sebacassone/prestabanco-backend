@@ -723,4 +723,49 @@ public class UsersServiceTest {
         assertThat(result).isNull();
     }
 
+    @Test
+    void whenAgeIsLessThan70_thenReturnTrue() {
+        // Given
+        Integer idUser = 1;
+        Integer age = 30;
+
+        // When
+        when(usersRepository.getAge(idUser)).thenReturn(age);
+
+        Boolean result = usersService.applicantsAge(idUser);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void whenAgeIs70_thenReturnFalse() {
+        // Given
+        Integer idUser = 1;
+        Integer age = 70;
+
+        // When
+        when(usersRepository.getAge(idUser)).thenReturn(age);
+
+        Boolean result = usersService.applicantsAge(idUser);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenAgeIsGreaterThan70_thenReturnFalse() {
+        // Given
+        Integer idUser = 1;
+        Integer age = 75;
+
+        // When
+        when(usersRepository.getAge(idUser)).thenReturn(age);
+
+        Boolean result = usersService.applicantsAge(idUser);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
 }

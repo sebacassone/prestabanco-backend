@@ -11,9 +11,12 @@ import java.util.List;
 @Service
 public class DebtsService {
     private final DebtsRepository debtsRepository;
+    private final IncomesService incomesService;
+
     @Autowired
-    public DebtsService(DebtsRepository debtsRepository) {
+    public DebtsService(DebtsRepository debtsRepository, IncomesService incomesService) {
         this.debtsRepository = debtsRepository;
+        this.incomesService = incomesService;
     }
 
     public Boolean hasUnpaidDebtsOrMorocities(Integer idUser) {
@@ -43,5 +46,18 @@ public class DebtsService {
         }
 
         return hasUnpaidDebtsOrMorocities;
+    }
+
+    public Boolean relationDebtsIncome (Integer idUser, Float quota){
+        if (idUser <= 0 || quota <= 0){
+            return null;
+        }
+        // Get debts from the user
+        Float debtTotal = debtsRepository.getSumAmountDebt(idUser);
+        Float avarageSalary = incomesService.avarageSalary(idUser);
+        if (avarageSalary == 0) {
+            return false;
+        }
+        return ((debtTotal + quota) / avarageSalary) <= 0.5f;
     }
 }

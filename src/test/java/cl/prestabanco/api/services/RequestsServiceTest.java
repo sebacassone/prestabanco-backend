@@ -1,5 +1,6 @@
 package cl.prestabanco.api.services;
 
+import cl.prestabanco.api.DTOs.RequestsWithTypeLoan;
 import cl.prestabanco.api.models.RequestsEntity;
 import cl.prestabanco.api.models.LoansEntity;
 import cl.prestabanco.api.models.UsersEntity;
@@ -14,6 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import io.github.cdimascio.dotenv.Dotenv;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -60,10 +64,9 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = null;
         Integer userRequest = 1;
-        Integer evaluationRequest = 1;
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isEqualTo(null);
@@ -75,10 +78,9 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = -1;
         Integer userRequest = 1;
-        Integer evaluationRequest = 1;
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isEqualTo(null);
@@ -90,11 +92,9 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = 1;
         Integer userRequest = 1;
-        Integer evaluationRequest = 1;
 
         when(loansService.findLoan(leanRequest)).thenReturn(loan);
         when(usersService.findUser(userRequest)).thenReturn(user);
-        when(evaluationsService.findEvaluation(evaluationRequest)).thenReturn(evaluation);
 
         // Mock saving the request and ensure it has stateRequest set
         when(requestsRepository.save(any(RequestsEntity.class))).thenAnswer(invocation -> {
@@ -104,14 +104,13 @@ public class RequestsServiceTest {
         });
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getStateRequest()).isEqualTo("PENDING");
         assertThat(result.getLeanRequest()).isEqualTo(loan);
         assertThat(result.getUserRequest()).isEqualTo(user);
-        assertThat(result.getEvaluationRequest()).isEqualTo(evaluation);
     }
 
 
@@ -121,10 +120,9 @@ public class RequestsServiceTest {
         String stateRequest = null;
         Integer leanRequest = 1;
         Integer userRequest = 1;
-        Integer evaluationRequest = 1;
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isEqualTo(null);
@@ -136,14 +134,12 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = 1;
         Integer userRequest = 1;
-        Integer evaluationRequest = 1;
 
         when(loansService.findLoan(leanRequest)).thenReturn(null);
         when(usersService.findUser(userRequest)).thenReturn(user);
-        when(evaluationsService.findEvaluation(evaluationRequest)).thenReturn(evaluation);
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isEqualTo(null);
@@ -155,14 +151,12 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = 1;
         Integer userRequest = 1;
-        Integer evaluationRequest = 1;
 
         when(loansService.findLoan(leanRequest)).thenReturn(loan);
         when(usersService.findUser(userRequest)).thenReturn(null);
-        when(evaluationsService.findEvaluation(evaluationRequest)).thenReturn(evaluation);
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isEqualTo(null);
@@ -174,14 +168,11 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = 1;
         Integer userRequest = 1;
-        Integer evaluationRequest = 1;
 
         when(loansService.findLoan(leanRequest)).thenReturn(loan);
         when(usersService.findUser(userRequest)).thenReturn(user);
-        when(evaluationsService.findEvaluation(evaluationRequest)).thenReturn(null);
-
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isEqualTo(null);
@@ -193,10 +184,9 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = 1;
         Integer userRequest = null;
-        Integer evaluationRequest = null;
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isNull(); // It should return null when both are null
@@ -208,10 +198,9 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = 1;
         Integer userRequest = 0; // userRequest <= 0
-        Integer evaluationRequest = null;
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isNull(); // It should return null when userRequest is zero and evaluationRequest is null
@@ -223,10 +212,9 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = 1;
         Integer userRequest = null;
-        Integer evaluationRequest = 0; // evaluationRequest <= 0
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isNull(); // It should return null when userRequest is null and evaluationRequest is zero
@@ -238,10 +226,9 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = 1;
         Integer userRequest = 1; // userRequest <= 0
-        Integer evaluationRequest = -1; // evaluationRequest <= 0
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isNull(); // It should return null when both are less than or equal to zero
@@ -253,13 +240,235 @@ public class RequestsServiceTest {
         String stateRequest = "PENDING";
         Integer leanRequest = 1;
         Integer userRequest = -1; // userRequest <= 0
-        Integer evaluationRequest = 1; // evaluationRequest <= 0
 
         // When
-        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest, evaluationRequest);
+        RequestsEntity result = requestsService.saveRequest(stateRequest, leanRequest, userRequest);
 
         // Then
         assertThat(result).isNull(); // It should return null when both are less than or equal to zero
     }
 
+    @Test
+    void whenRequestNotFoundUpdate_thenReturnNull() {
+        // Given
+        Integer idRequest = 1;
+        when(requestsRepository.findById(idRequest)).thenReturn(java.util.Optional.empty());
+
+        // When
+        RequestsEntity result = requestsService.updateStateRequest(idRequest, "Approved");
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenRequestFound_thenUpdateState() {
+        // Given
+        Integer idRequest = 1;
+        RequestsEntity request = new RequestsEntity();
+        request.setIdRequest(idRequest);
+        request.setStateRequest("Pending");
+        when(requestsRepository.findById(idRequest)).thenReturn(java.util.Optional.of(request));
+        when(requestsRepository.save(request)).thenReturn(request);
+
+        // When
+        RequestsEntity result = requestsService.updateStateRequest(idRequest, "Approved");
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.getStateRequest()).isEqualTo("Approved");
+    }
+
+    @Test
+    void whenUserIdIsZeroOrNegative_thenReturnNull() {
+        // Given: Invalid user id
+        Integer idUser = 0;
+
+        // When
+        List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenUserNotFoundRequestID_thenReturnNull() {
+        // Given: User not found (mocked behavior)
+        Integer idUser = 1;
+        when(usersService.findUser(idUser)).thenReturn(null);
+
+        // When
+        List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenRequestsNotFound_thenReturnNull() {
+        // Given: Valid user but no requests found
+        Integer idUser = 1;
+        when(usersService.findUser(idUser)).thenReturn(user);
+        when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(null);
+
+        // When
+        List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenRequestsFound_thenReturnCorrectTypeAndDocuments() {
+        // Given: Valid user and valid requests
+        Integer idUser = 1;
+        when(usersService.findUser(idUser)).thenReturn(user);
+
+        RequestsEntity request1 = new RequestsEntity();
+        request1.setIdRequest(1);
+        request1.setStateRequest("PENDING");
+        LoansEntity loan1 = new LoansEntity();
+        loan1.setTypeLoan("Primera Vivienda");
+        request1.setLeanRequest(loan1);
+
+        List<RequestsEntity> requests = Arrays.asList(request1);
+        when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
+
+        // When
+        List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);
+
+        // Then
+        assertThat(result).isNotNull();
+
+        // Check first request
+        RequestsWithTypeLoan requestWithTypeLoan1 = result.get(0);
+        assertThat(requestWithTypeLoan1.getIdRequest()).isEqualTo(1);
+        assertThat(requestWithTypeLoan1.getStateRequest()).isEqualTo("PENDING");
+        assertThat(requestWithTypeLoan1.getDocumentsRequired()).containsExactly("Comprobante de Ingresos", "Certificado de Avalúo", "Historial crediticio");
+    }
+
+    @Test
+    void whenRequestsFoundSecond_thenReturnCorrectTypeAndDocuments() {
+        // Given: Valid user and valid requests
+        Integer idUser = 1;
+        when(usersService.findUser(idUser)).thenReturn(user);
+
+        RequestsEntity request1 = new RequestsEntity();
+        request1.setIdRequest(1);
+        request1.setStateRequest("PENDING");
+        LoansEntity loan1 = new LoansEntity();
+        loan1.setTypeLoan("Segunda Vivienda");
+        request1.setLeanRequest(loan1);
+
+        List<RequestsEntity> requests = Arrays.asList(request1);
+        when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
+
+        // When
+        List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);
+
+        // Then
+        assertThat(result).isNotNull();
+
+        // Check first request
+        RequestsWithTypeLoan requestWithTypeLoan1 = result.get(0);
+        assertThat(requestWithTypeLoan1.getIdRequest()).isEqualTo(1);
+        assertThat(requestWithTypeLoan1.getStateRequest()).isEqualTo("PENDING");
+        assertThat(requestWithTypeLoan1.getDocumentsRequired()).containsExactly("Comprobante de Ingresos", "Certificado de Avalúo", "Historial crediticio", "Escritura de primera propiedad");
+    }
+
+    @Test
+    void whenRequestsFoundThird_thenReturnCorrectTypeAndDocuments() {
+        // Given: Valid user and valid requests
+        Integer idUser = 1;
+        when(usersService.findUser(idUser)).thenReturn(user);
+
+        RequestsEntity request1 = new RequestsEntity();
+        request1.setIdRequest(1);
+        request1.setStateRequest("PENDING");
+        LoansEntity loan1 = new LoansEntity();
+        loan1.setTypeLoan("Propiedades Comerciales");
+        request1.setLeanRequest(loan1);
+
+        List<RequestsEntity> requests = Arrays.asList(request1);
+        when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
+
+        // When
+        List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);
+
+        // Then
+        assertThat(result).isNotNull();
+
+        // Check first request
+        RequestsWithTypeLoan requestWithTypeLoan1 = result.get(0);
+        assertThat(requestWithTypeLoan1.getIdRequest()).isEqualTo(1);
+        assertThat(requestWithTypeLoan1.getStateRequest()).isEqualTo("PENDING");
+        assertThat(requestWithTypeLoan1.getDocumentsRequired()).containsExactly("Estado financiero del negocio", "Comprobante de ingresos", "Certificado de Avalúo", "Plan de negocios");
+    }
+
+    @Test
+    void whenRequestsFoundFourth_thenReturnCorrectTypeAndDocuments() {
+        // Given: Valid user and valid requests
+        Integer idUser = 1;
+        when(usersService.findUser(idUser)).thenReturn(user);
+
+        RequestsEntity request1 = new RequestsEntity();
+        request1.setIdRequest(1);
+        request1.setStateRequest("PENDING");
+        LoansEntity loan1 = new LoansEntity();
+        loan1.setTypeLoan("Remodalación");
+        request1.setLeanRequest(loan1);
+
+        List<RequestsEntity> requests = Arrays.asList(request1);
+        when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
+
+        // When
+        List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);
+
+        // Then
+        assertThat(result).isNotNull();
+
+        // Check first request
+        RequestsWithTypeLoan requestWithTypeLoan1 = result.get(0);
+        assertThat(requestWithTypeLoan1.getIdRequest()).isEqualTo(1);
+        assertThat(requestWithTypeLoan1.getStateRequest()).isEqualTo("PENDING");
+        assertThat(requestWithTypeLoan1.getDocumentsRequired()).containsExactly("Comprobante de Ingresos", "Presupuesto de la remodelación", "Certificado de Avalúo Actualizado");
+    }
+
+    @Test
+    void whenRequestHasUnknownLoanType_thenReturnEmptyDocuments() {
+        // Given: Valid user and valid request but with an unknown loan type
+        Integer idUser = 1;
+        when(usersService.findUser(idUser)).thenReturn(user);
+
+        RequestsEntity request = new RequestsEntity();
+        request.setIdRequest(1);
+        request.setStateRequest("PENDING");
+        LoansEntity loan = new LoansEntity();
+        loan.setTypeLoan("Desconocido");
+        request.setLeanRequest(loan);
+
+        List<RequestsEntity> requests = Arrays.asList(request);
+        when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
+
+        // When
+        List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.get(0).getDocumentsRequired()).isEmpty();  // No documents for unknown loan type
+    }
+
+    @Test
+    void whenRequestIsEmpty_thenReturnEmptyList() {
+        // Given: User exists but no requests associated
+        Integer idUser = 1;
+        when(usersService.findUser(idUser)).thenReturn(user);
+        when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(Arrays.asList());
+
+        // When
+        List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);
+
+        // Then
+        assertThat(result).isNotNull();
+    }
 }

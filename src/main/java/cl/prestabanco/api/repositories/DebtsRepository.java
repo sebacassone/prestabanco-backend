@@ -34,4 +34,12 @@ public interface DebtsRepository extends JpaRepository<DebtsEntity, Integer> {
                     ")", nativeQuery = true
     )
     List<DebtsWithMorosityDTO> findUnpaidDebtsWithMorosity(@Param("idUser") Integer idUser);
+
+    @Query(
+            value = "SELECT SUM(amount_debt) " +
+                    "FROM users s " +
+                    "INNER JOIN debts d ON s.id_user = d.id_user " +
+                    "WHERE s.id_user = :idUser", nativeQuery = true
+    )
+    Float getSumAmountDebt (@Param("idUser") Integer idUser);
 }

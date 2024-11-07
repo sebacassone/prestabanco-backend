@@ -12,14 +12,16 @@ public class EvaluationsService {
     private final IncomesService incomesService;
     private final DebtsService debtsService;
     private final JobsService jobsService;
+    private final LoansService loansService;
 
     @Autowired
-    public EvaluationsService(EvaluationsRepository evaluationsRepository, UsersService usersService, IncomesService incomesService, DebtsService debtsService, JobsService jobsService) {
+    public EvaluationsService(EvaluationsRepository evaluationsRepository, UsersService usersService, IncomesService incomesService, DebtsService debtsService, JobsService jobsService, LoansService loansService) {
         this.evaluationsRepository = evaluationsRepository;
         this.usersService = usersService;
         this.incomesService = incomesService;
         this.debtsService = debtsService;
         this.jobsService = jobsService;
+        this.loansService = loansService;
     }
 
 
@@ -34,7 +36,7 @@ public class EvaluationsService {
         return evaluationsRepository.save(evaluation);
     }
 
-    public EvaluationsEntity makeEvaluation(Integer idUser, Float quotaLoan, Object maximumAmount) {
+    public EvaluationsEntity makeEvaluation(Integer idUser, Float quotaLoan, Float maximumAmountPercentage, String typeLoan) {
         // New evaluation
         EvaluationsEntity evaluation = new EvaluationsEntity();
 
@@ -47,6 +49,19 @@ public class EvaluationsService {
         Float quotaIncome = quotaLoan/averageSalary * 100;
         Boolean hasUnpaidDebtsOrMorocities = debtsService.hasUnpaidDebtsOrMorocities(idUser);
         Boolean seniorityEvaluation = jobsService.hasSeniority(idUser);
+        Boolean relationDebtsIncome = debtsService.relationDebtsIncome(idUser, quotaLoan);
+        Boolean maximumFinancingAmount = loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage);
+        Boolean applicantsAge = usersService.applicantsAge(idUser);
+        // will be set to true because no user stories are requested regarding the savings account.
+        // will not be considered for this project delivery.
+
+        // Set the evaluation
+        evaluation.setQuotaIncomeRatio(quotaIncome <= 35);
+        evaluation.setCustomerCredit(!hasUnpaidDebtsOrMorocities);
+        evaluation.setSeniorityEvaluation(seniorityEvaluation);
+        evaluation.setDebtIncomeRatio(relationDebtsIncome);
+        evaluation.setMaximumFinancingAmount(maximumFinancingAmount);
+        evaluation.setAgeApplicant(applicantsAge);
 
         return evaluation;
     }

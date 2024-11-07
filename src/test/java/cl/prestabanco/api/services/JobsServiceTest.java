@@ -16,6 +16,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -134,5 +135,43 @@ public class JobsServiceTest {
 
         // Then
         assertThat(result).isNull(); // If jobId is null, return null
+    }
+
+    @Test
+    void whenUserHasSeniority_thenReturnTrue() {
+        // Given
+        JobsEntity job = new JobsEntity();
+        when(jobsRepository.hasSeniority(anyInt())).thenReturn(job);
+
+        // When
+        Boolean result = jobsService.hasSeniority(1);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void whenUserHasNoSeniority_thenReturnFalse() {
+        // Given
+        when(jobsRepository.hasSeniority(anyInt())).thenReturn(null);
+
+        // When
+        Boolean result = jobsService.hasSeniority(1);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenUserIdIsNull_thenThrowException() {
+        // Given
+        Integer idUser = null;
+
+        // When / Then
+        try {
+            jobsService.hasSeniority(idUser);
+        } catch (NullPointerException e) {
+            assertThat(e).hasMessage("idUser is marked non-null but is null");
+        }
     }
 }

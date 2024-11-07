@@ -14,6 +14,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
@@ -369,6 +370,221 @@ public class LoansServiceTest {
 
         // When
         LoansEntity result = loansService.calculateLoan(loan);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenAmountPercentageIsNull_thenReturnFalse() {
+        // Given
+        String typeLoan = "Primera Vivienda";
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, null);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenAmountPercentageIsLessThanOrEqualToZero_thenReturnFalse() {
+        // Given
+        String typeLoan = "Primera Vivienda";
+
+        // When
+        Boolean result1 = loansService.maximumFinancingAmount(typeLoan, 0f);
+        Boolean result2 = loansService.maximumFinancingAmount(typeLoan, -0.1f);
+
+        // Then
+        assertThat(result1).isFalse();
+        assertThat(result2).isFalse();
+    }
+
+    @Test
+    void whenAmountPercentageIsGreaterThanOne_thenReturnFalse() {
+        // Given
+        String typeLoan = "Primera Vivienda";
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, 1.1f);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenAmountPercentageIsValidAndTypeLoanIsPrimeraVivienda_thenReturnTrue() {
+        // Given
+        String typeLoan = "Primera Vivienda";
+        Float amountPercentage = 0.75f;
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void whenAmountPercentageIsGreaterThanMaximumForPrimeraVivienda_thenReturnFalse() {
+        // Given
+        String typeLoan = "Primera Vivienda";
+        Float amountPercentage = 0.85f;
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenAmountPercentageIsValidAndTypeLoanIsSegundaVivienda_thenReturnTrue() {
+        // Given
+        String typeLoan = "Segunda Vivienda";
+        Float amountPercentage = 0.65f;
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void whenAmountPercentageIsGreaterThanMaximumForSegundaVivienda_thenReturnFalse() {
+        // Given
+        String typeLoan = "Segunda Vivienda";
+        Float amountPercentage = 0.75f;
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenAmountPercentageIsValidAndTypeLoanIsPropiedadesComerciales_thenReturnTrue() {
+        // Given
+        String typeLoan = "Propiedades Comerciales";
+        Float amountPercentage = 0.55f;
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void whenAmountPercentageIsGreaterThanMaximumForPropiedadesComerciales_thenReturnFalse() {
+        // Given
+        String typeLoan = "Propiedades Comerciales";
+        Float amountPercentage = 0.65f;
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenAmountPercentageIsValidAndTypeLoanIsRemodelacion_thenReturnTrue() {
+        // Given
+        String typeLoan = "Remodelación";
+        Float amountPercentage = 0.45f;
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void whenAmountPercentageIsGreaterThanMaximumForRemodelacion_thenReturnFalse() {
+        // Given
+        String typeLoan = "Remodelación";
+        Float amountPercentage = 0.55f;
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenTypeLoanIsInvalid_thenReturnFalse() {
+        // Given
+        String typeLoan = "Personal";
+        Float amountPercentage = 0.5f;
+
+        // When
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenLoanExists_thenReturnLoan() {
+        // Given
+        LoansEntity loan = new LoansEntity();
+        loan.setIdLoan(1);
+        loan.setAmountLoan(50000);
+        loan.setTypeLoan("Primera Vivienda");
+        loan.setNumberOfPaymentsLoan(180);
+        Integer idRequest = 100;
+        when(loansRepository.findLoanByIdRequest(idRequest)).thenReturn(loan);
+
+        // When
+        LoansEntity result = loansService.getLoanByIdRequest(idRequest);
+
+        // Then
+        assertThat(result).isNotNull();
+        assertThat(result.getIdLoan()).isEqualTo(1);
+        assertThat(result.getAmountLoan()).isEqualTo(50000);
+        assertThat(result.getTypeLoan()).isEqualTo("Primera Vivienda");
+    }
+
+    @Test
+    void whenLoanDoesNotExist_thenReturnNull() {
+        // Given
+        Integer idRequest = 100;
+        when(loansRepository.findLoanByIdRequest(idRequest)).thenReturn(null);
+
+        // When
+        LoansEntity result = loansService.getLoanByIdRequest(idRequest);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenIdRequestIsNull_thenReturnNull() {
+        // Given
+        Integer idRequest = null;
+        when(loansRepository.findLoanByIdRequest(anyInt())).thenReturn(null);
+
+        // When
+        LoansEntity result = loansService.getLoanByIdRequest(idRequest);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenIdRequestIsInvalid_thenReturnNull() {
+        // Given
+        Integer invalidIdRequest = 9999;  // Non-existing loan ID
+        when(loansRepository.findLoanByIdRequest(invalidIdRequest)).thenReturn(null);
+
+        // When
+        LoansEntity result = loansService.getLoanByIdRequest(invalidIdRequest);
 
         // Then
         assertThat(result).isNull();

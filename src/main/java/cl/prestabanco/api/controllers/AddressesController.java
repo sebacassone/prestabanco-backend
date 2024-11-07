@@ -19,6 +19,9 @@ public class AddressesController {
         try {
             // the address is saved in database
             AddressesEntity response = addressesService.findAddressAndSave(address);
+            if (response == null) {
+                return ResponseEntity.badRequest().build();
+            }
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

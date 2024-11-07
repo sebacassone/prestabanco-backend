@@ -40,5 +40,5 @@ public class LoansEntity {
     @Column(nullable = false)
     private Float secureAmountLoan;
     @Column(nullable = false)
-    private Float maximumAmountLoan; // as a percentage
+    private Float maximumAmountPercentageLoan;
 }

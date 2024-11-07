@@ -25,6 +25,9 @@ public class DebtsServiceTest {
     @MockBean
     private DebtsRepository debtsRepository;
 
+    @MockBean
+    private IncomesService incomesService;
+
     @Autowired
     private DebtsService debtsService;
 
@@ -40,10 +43,8 @@ public class DebtsServiceTest {
     @Test
     void whenUserIdIsNull_thenReturnFalse() {
         // Given
-        Integer userId = null;
-
         // When
-        Boolean result = debtsService.hasUnpaidDebtsOrMorocities(userId);
+        Boolean result = debtsService.hasUnpaidDebtsOrMorocities(null);
 
         // Then
         assertThat(result).isFalse();
@@ -158,5 +159,136 @@ public class DebtsServiceTest {
             assertThat(e).isInstanceOf(RuntimeException.class);
             assertThat(e.getMessage()).isEqualTo("Database error");
         }
+    }
+
+    @Test
+    void whenIdUserIsZero_thenReturnNull() {
+        // Given
+        Integer idUser = 0;
+        Float quota = 1000f;
+
+        // When
+        Boolean result = debtsService.relationDebtsIncome(idUser, quota);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenQuotaIsNegative_thenReturnNull() {
+        // Given
+        Integer idUser = 1;
+        Float quota = -1f;
+
+        // When
+        Boolean result = debtsService.relationDebtsIncome(idUser, quota);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenDebtTotalIsZeroAndQuotaIsZero_thenReturnFalse() {
+        // Given
+        Integer idUser = 1;
+        Float quota = 0f;
+        when(debtsRepository.getSumAmountDebt(idUser)).thenReturn(0f);
+        when(incomesService.avarageSalary(idUser)).thenReturn(2000f);
+
+        // When
+        Boolean result = debtsService.relationDebtsIncome(idUser, quota);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenDebtTotalIsZeroAndQuotaIsPositive_thenReturnTrue() {
+        // Given
+        Integer idUser = 1;
+        Float quota = 500f;
+        when(debtsRepository.getSumAmountDebt(idUser)).thenReturn(0f);
+        when(incomesService.avarageSalary(idUser)).thenReturn(2000f);
+
+        // When
+        Boolean result = debtsService.relationDebtsIncome(idUser, quota);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void whenDebtTotalIsPositiveAndQuotaIsZero_thenReturnTrue() {
+        // Given
+        Integer idUser = 1;
+        Float quota = 0f;
+        when(debtsRepository.getSumAmountDebt(idUser)).thenReturn(500f);
+        when(incomesService.avarageSalary(idUser)).thenReturn(2000f);
+
+        // When
+        Boolean result = debtsService.relationDebtsIncome(idUser, quota);
+
+        // Then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void whenDebtTotalPlusQuotaIsLessThanHalfSalary_thenReturnTrue() {
+        // Given
+        Integer idUser = 1;
+        Float quota = 200f;
+        when(debtsRepository.getSumAmountDebt(idUser)).thenReturn(100f);
+        when(incomesService.avarageSalary(idUser)).thenReturn(1000f);
+
+        // When
+        Boolean result = debtsService.relationDebtsIncome(idUser, quota);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    void whenDebtTotalPlusQuotaIsGreaterThanHalfSalary_thenReturnFalse() {
+        // Given
+        Integer idUser = 1;
+        Float quota = 700f;
+        when(debtsRepository.getSumAmountDebt(idUser)).thenReturn(500f);
+        when(incomesService.avarageSalary(idUser)).thenReturn(1000f);
+
+        // When
+        Boolean result = debtsService.relationDebtsIncome(idUser, quota);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenAverageSalaryIsZero_thenReturnFalse() {
+        // Given
+        Integer idUser = 1;
+        Float quota = 500f;
+        when(debtsRepository.getSumAmountDebt(idUser)).thenReturn(300f);
+        when(incomesService.avarageSalary(idUser)).thenReturn(0f);
+
+        // When
+        Boolean result = debtsService.relationDebtsIncome(idUser, quota);
+
+        // Then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    void whenDebtTotalAndQuotaAreValid_thenReturnCorrectResult() {
+        // Given
+        Integer idUser = 1;
+        Float quota = 200f;
+        when(debtsRepository.getSumAmountDebt(idUser)).thenReturn(500f);
+        when(incomesService.avarageSalary(idUser)).thenReturn(2000f);
+
+        // When
+        Boolean result = debtsService.relationDebtsIncome(idUser, quota);
+
+        // Then
+        assertThat(result).isTrue();
     }
 }

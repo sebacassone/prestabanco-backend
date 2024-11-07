@@ -52,4 +52,9 @@ public class UsersService {
         }
         return usersRepository.findByRutUserAndPasswordUser(rutUser, passwordUser);
     }
+
+    public Boolean applicantsAge(Integer idUser) {
+        Integer age = usersRepository.getAge(idUser);
+        return age < 70;
+    }
 }
