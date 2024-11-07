@@ -5,7 +5,7 @@ pipeline {
         GITHUB_REPO = 'https://github.com/sebacassone/prestabanco-backend'
         GITHUB_BRANCH = 'main'
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
-        DOCKER_IMAGE = 'sebacassone/prestabanco-frontend'
+        DOCKER_IMAGE = 'sebacassone/prestabanco-backend'
         DB_HOST = 'postgres:5432'
         DB_NAME = 'presta_banco'
         DB_USERNAME = 'postgres'
