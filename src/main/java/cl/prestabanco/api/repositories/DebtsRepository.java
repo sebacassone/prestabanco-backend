@@ -25,7 +25,7 @@ public interface DebtsRepository extends JpaRepository<DebtsEntity, Integer> {
                     "FROM users s " +
                     "INNER JOIN debts d ON s.id_user = d.id_user " +
                     "INNER JOIN morocities m ON d.id_debt = m.id_debt " +
-                    "WHERE d.state_debt = 'inpago' AND s.id_user = :idUser +" +
+                    "WHERE d.state_debt = 'inpago' AND s.id_user = :idUser " +
                     "AND NOT EXISTS (" +
                         "SELECT 1 " +
                         "FROM users s1 "+

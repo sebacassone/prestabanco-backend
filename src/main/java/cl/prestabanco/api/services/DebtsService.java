@@ -48,13 +48,16 @@ public class DebtsService {
         return hasUnpaidDebtsOrMorocities;
     }
 
-    public Boolean relationDebtsIncome (Integer idUser, Float quota){
+    public Boolean relationDebtsIncome (Integer idUser, Double quota){
         if (idUser <= 0 || quota <= 0){
             return null;
         }
         // Get debts from the user
         Float debtTotal = debtsRepository.getSumAmountDebt(idUser);
-        Float avarageSalary = incomesService.avarageSalary(idUser);
+        Double avarageSalary = incomesService.avarageSalary(idUser);
+        if (debtTotal == null) {
+            debtTotal = 0f;
+        }
         if (avarageSalary == 0) {
             return false;
         }

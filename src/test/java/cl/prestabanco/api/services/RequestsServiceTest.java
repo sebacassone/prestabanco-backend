@@ -255,7 +255,7 @@ public class RequestsServiceTest {
         when(requestsRepository.findById(idRequest)).thenReturn(java.util.Optional.empty());
 
         // When
-        RequestsEntity result = requestsService.updateStateRequest(idRequest, "Approved");
+        RequestsEntity result = requestsService.updateRequest(idRequest, "Approved", 1);
 
         // Then
         assertThat(result).isNull();
@@ -272,7 +272,7 @@ public class RequestsServiceTest {
         when(requestsRepository.save(request)).thenReturn(request);
 
         // When
-        RequestsEntity result = requestsService.updateStateRequest(idRequest, "Approved");
+        RequestsEntity result = requestsService.updateRequest(idRequest, "Approved",1);
 
         // Then
         assertThat(result).isNotNull();

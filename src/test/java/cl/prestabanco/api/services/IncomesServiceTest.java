@@ -87,10 +87,10 @@ public class IncomesServiceTest {
         when(incomesRepository.findByJobIncomeUserJobIdUser(any(Integer.class))).thenReturn(incomes);
 
         // When
-        Float average = incomesService.avarageSalary(1);
+        Double average = incomesService.avarageSalary(1);
 
         // Then
-        assertThat(average).isEqualTo(1500.0f); // El promedio de 1000 y 2000 es 1500
+        assertThat(average).isEqualTo(1500.0); // El promedio de 1000 y 2000 es 1500
     }
 
     @Test
@@ -100,9 +100,9 @@ public class IncomesServiceTest {
         when(incomesRepository.findByJobIncomeUserJobIdUser(any(Integer.class))).thenReturn(new ArrayList<>());
 
         // When
-        Float average = incomesService.avarageSalary(1);
+        Double average = incomesService.avarageSalary(1);
 
         // Then
-        assertThat(average).isEqualTo(0f); // Si no hay ingresos, el promedio debe ser 0
+        assertThat(average).isEqualTo(0.0); // Si no hay ingresos, el promedio debe ser 0
     }
 }

@@ -195,12 +195,12 @@ public class EvaluationsServiceTest {
     void whenAverageSalaryIsZero_thenReturnNull() {
         // Given
         Integer idUser = 1;
-        Float quotaLoan = 1000f;
-        Float maximumAmountPercentage = 50f;
+        Double quotaLoan = 1000.0;
+        Double maximumAmountPercentage = 50.0;
         String typeLoan = "Primera Vivienda";
 
         // When
-        when(incomesService.avarageSalary(idUser)).thenReturn(0f);
+        when(incomesService.avarageSalary(idUser)).thenReturn(0.0);
         EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
 
         // Then
@@ -211,10 +211,10 @@ public class EvaluationsServiceTest {
     void whenQuotaIncomeRatioIsGreaterThan35_thenSetQuotaIncomeRatioFalse() {
         // Given
         Integer idUser = 1;
-        Float quotaLoan = 5000f;
-        Float maximumAmountPercentage = 50f;
+        Double quotaLoan = 5000.0;
+        Double maximumAmountPercentage = 50.0;
         String typeLoan = "Primera Vivienda";
-        Float averageSalary = 10000f;
+        Double averageSalary = 10000.0;
 
         // When
         when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
@@ -234,10 +234,10 @@ public class EvaluationsServiceTest {
     void whenQuotaIncomeRatioIsLessThanOrEqualTo35_thenSetQuotaIncomeRatioTrue() {
         // Given
         Integer idUser = 1;
-        Float quotaLoan = 3500f;
-        Float maximumAmountPercentage = 50f;
+        Double quotaLoan = 3500.0;
+        Double maximumAmountPercentage = 50.0;
         String typeLoan = "Primera Vivienda";
-        Float averageSalary = 10000f;
+        Double averageSalary = 10000.0;
 
         // When
         when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
@@ -257,10 +257,10 @@ public class EvaluationsServiceTest {
     void whenHasUnpaidDebtsOrMorocities_thenSetCustomerCreditFalse() {
         // Given
         Integer idUser = 1;
-        Float quotaLoan = 3500f;
-        Float maximumAmountPercentage = 50f;
+        Double quotaLoan = 3500.0;
+        Double maximumAmountPercentage = 50.0;
         String typeLoan = "Segunda Vivienda";
-        Float averageSalary = 10000f;
+        Double averageSalary = 10000.0;
 
         // When
         when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
@@ -280,10 +280,10 @@ public class EvaluationsServiceTest {
     void whenHasSeniority_thenSetSeniorityEvaluationTrue() {
         // Given
         Integer idUser = 1;
-        Float quotaLoan = 3500f;
-        Float maximumAmountPercentage = 50f;
+        Double quotaLoan = 3500.0;
+        Double maximumAmountPercentage = 50.0;
         String typeLoan = "Propiedades Comerciales";
-        Float averageSalary = 10000f;
+        Double averageSalary = 10000.0;
 
         // When
         when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
@@ -303,10 +303,10 @@ public class EvaluationsServiceTest {
     void whenRelationDebtsIncomeTrue_thenSetDebtIncomeRatioTrue() {
         // Given
         Integer idUser = 1;
-        Float quotaLoan = 3500f;
-        Float maximumAmountPercentage = 50f;
+        Double quotaLoan = 3500.0;
+        Double maximumAmountPercentage = 50.0;
         String typeLoan = "Remodelación";
-        Float averageSalary = 10000f;
+        Double averageSalary = 10000.0;
 
         // When
         when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
@@ -326,10 +326,10 @@ public class EvaluationsServiceTest {
     void whenMaximumFinancingAmountFalse_thenSetMaximumFinancingAmountFalse() {
         // Given
         Integer idUser = 1;
-        Float quotaLoan = 3500f;
-        Float maximumAmountPercentage = 50f;
+        Double quotaLoan = 3500.0;
+        Double maximumAmountPercentage = 50.0;
         String typeLoan = "Segunda Vivienda";
-        Float averageSalary = 10000f;
+        Double averageSalary = 10000.0;
 
         // When
         when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
@@ -349,10 +349,10 @@ public class EvaluationsServiceTest {
     void whenApplicantsAgeFalse_thenSetAgeApplicantFalse() {
         // Given
         Integer idUser = 1;
-        Float quotaLoan = 3500f;
-        Float maximumAmountPercentage = 50f;
+        Double quotaLoan = 3500.0;
+        Double maximumAmountPercentage = 50.0;
         String typeLoan = "Propiedades Comerciales";
-        Float averageSalary = 10000f;
+        Double averageSalary = 10000.0;
 
         // When
         when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);
@@ -372,10 +372,10 @@ public class EvaluationsServiceTest {
     void whenAllConditionsAreMet_thenReturnEvaluation() {
         // Given
         Integer idUser = 1;
-        Float quotaLoan = 3500f;
-        Float maximumAmountPercentage = 50f;
+        Double quotaLoan = 3500.0;
+        Double maximumAmountPercentage = 50.0;
         String typeLoan = "Primera Vivienda";
-        Float averageSalary = 10000f;
+        Double averageSalary = 10000.0;
 
         // When
         when(incomesService.avarageSalary(idUser)).thenReturn(averageSalary);

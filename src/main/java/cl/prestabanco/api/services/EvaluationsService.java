@@ -36,18 +36,19 @@ public class EvaluationsService {
         return evaluationsRepository.save(evaluation);
     }
 
-    public EvaluationsEntity makeEvaluation(Integer idUser, Float quotaLoan, Float maximumAmountPercentage, String typeLoan) {
+    public EvaluationsEntity makeEvaluation(Integer idUser, Double quotaLoan, Double maximumAmountPercentage, String typeLoan) {
         // New evaluation
         EvaluationsEntity evaluation = new EvaluationsEntity();
 
         // Find the user and find the incomes of the user
-        Float averageSalary = incomesService.avarageSalary(idUser);
-        if (averageSalary == 0) {
+        Double averageSalary = incomesService.avarageSalary(idUser);
+        if (averageSalary == 0.0) {
             return null;
         }
         // Calculate the quota income ratio
-        Float quotaIncome = quotaLoan/averageSalary * 100;
+        double quotaIncome = quotaLoan/averageSalary * 100;
         Boolean hasUnpaidDebtsOrMorocities = debtsService.hasUnpaidDebtsOrMorocities(idUser);
+
         Boolean seniorityEvaluation = jobsService.hasSeniority(idUser);
         Boolean relationDebtsIncome = debtsService.relationDebtsIncome(idUser, quotaLoan);
         Boolean maximumFinancingAmount = loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage);
@@ -58,11 +59,13 @@ public class EvaluationsService {
         // Set the evaluation
         evaluation.setQuotaIncomeRatio(quotaIncome <= 35);
         evaluation.setCustomerCredit(!hasUnpaidDebtsOrMorocities);
+
         evaluation.setSeniorityEvaluation(seniorityEvaluation);
         evaluation.setDebtIncomeRatio(relationDebtsIncome);
         evaluation.setMaximumFinancingAmount(maximumFinancingAmount);
         evaluation.setAgeApplicant(applicantsAge);
 
-        return evaluation;
+        // Save the evaluation
+        return saveEvaluation(evaluation);
     }
 }

@@ -41,13 +41,13 @@ public class IncomesService {
      * @param idUser - Id of the user
      * @return
      */
-    public Float avarageSalary (Integer idUser) {
+    public Double avarageSalary (Integer idUser) {
         List<IncomesEntity> incomes = incomesRepository.findByJobIncomeUserJobIdUser(idUser);
         if(incomes.isEmpty()) {
-            return 0f;
+            return 0.0;
         }
 
-        Float sum = 0f;
+        Double sum = 0.0;
         for (IncomesEntity income : incomes) {
             sum += income.getAmountIncome();
         }

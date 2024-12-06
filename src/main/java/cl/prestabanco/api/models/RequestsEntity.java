@@ -20,6 +20,7 @@ public class RequestsEntity {
     private Integer idRequest;
     @Column(nullable = false)
     private String stateRequest;
+    private Integer idEvaluation;
 
     // Foreign Key
     @OneToOne
@@ -30,8 +31,4 @@ public class RequestsEntity {
     @JoinColumn(name = "idUser")
     @JsonIgnore
     private UsersEntity userRequest;
-    @OneToOne
-    @JoinColumn(name = "idEvaluation")
-    @JsonIgnore
-    private EvaluationsEntity evaluationRequest;
 }

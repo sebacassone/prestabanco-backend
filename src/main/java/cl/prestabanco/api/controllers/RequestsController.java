@@ -46,10 +46,14 @@ public class RequestsController {
         }
     }
 
-    @PutMapping("/update-state-request/{idRequest}")
-    public ResponseEntity<RequestsEntity> updateStateRequest(@PathVariable("idRequest") Integer idRequest, @RequestBody Map<String, Object> jsonMap) {
+    @PutMapping("/update-request/{idRequest}")
+    public ResponseEntity<RequestsEntity> updateRequest(@PathVariable("idRequest") Integer idRequest, @RequestBody Map<String, Object> jsonMap) {
         try {
-            RequestsEntity response = requestsService.updateStateRequest(idRequest, (String) jsonMap.get("stateRequest"));
+            RequestsEntity response = requestsService.updateRequest(
+                    idRequest,
+                    (String) jsonMap.get("stateRequest"),
+                    (Integer) jsonMap.get("idEvaluation")
+            );
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();

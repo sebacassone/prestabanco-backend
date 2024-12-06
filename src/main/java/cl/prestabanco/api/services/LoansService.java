@@ -71,19 +71,27 @@ public class LoansService {
         return loansRepository.save(loan);
     }
 
-    public Boolean maximumFinancingAmount(String typeLoan, Float amountPercentage) {
-        Float maximumAmountPercentage = switch (typeLoan) {
-            case "Primera Vivienda" -> 0.80f;
-            case "Segunda Vivienda" -> 0.70f;
-            case "Propiedades Comerciales" -> 0.60f;
-            case "Remodelación" -> 0.50f;
-            default -> 0f;
+    /**
+     * Method to calculate the maximum financing amount
+     * @param typeLoan - Type of loan
+     * @param amountPercentage - Amount percentage
+     * @return
+     */
+    public Boolean maximumFinancingAmount(String typeLoan, Double amountPercentage) {
+        Double maximumAmountPercentage = switch (typeLoan) {
+            case "Primera Vivienda" -> 0.80;
+            case "Segunda Vivienda" -> 0.70;
+            case "Propiedades Comerciales" -> 0.60;
+            case "Remodelación" -> 0.50;
+            default -> 0.0;
         };
+
         if (maximumAmountPercentage == 0 || amountPercentage == null || amountPercentage <= 0 || amountPercentage > 1) {
             return false;
         }
         return amountPercentage <= maximumAmountPercentage;
     }
+
 
     public LoansEntity getLoanByIdRequest(Integer idRequest) {
         return loansRepository.findLoanByIdRequest(idRequest);

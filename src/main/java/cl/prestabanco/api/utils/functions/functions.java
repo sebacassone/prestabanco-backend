@@ -28,4 +28,17 @@ public class functions {
         }
         return numberFloat;
     }
+
+    public static Double transformIntegertoDouble(Object value){
+        // Convertir amountIncome a Float
+        Double numberFloat;
+        if (value instanceof Integer) {
+            numberFloat = ((Integer) value).doubleValue();
+        } else if (value instanceof Float) {
+            numberFloat = (Double) value;
+        } else {
+            numberFloat = Double.parseDouble(value.toString());
+        }
+        return numberFloat;
+    }
 }

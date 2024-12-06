@@ -54,6 +54,7 @@ public class RequestsService {
     private List<RequestsWithTypeLoan> getRequestsEntities(List<RequestsEntity> requests) {
         List<RequestsWithTypeLoan> requestsWithTypeLoan = new ArrayList<>();
         for (RequestsEntity request : requests) {
+            System.out.println("Request: " + request);
             RequestsWithTypeLoan requestWithTypeLoan = new RequestsWithTypeLoan();
             requestWithTypeLoan.setIdRequest(request.getIdRequest());
             requestWithTypeLoan.setStateRequest(request.getStateRequest());
@@ -66,19 +67,25 @@ public class RequestsService {
                 default -> new String[0];
             };
             requestWithTypeLoan.setDocumentsRequired(DocumentsRequired);
-            requestWithTypeLoan.setLeanRequest(loansService.getLoanByIdRequest(request.getIdRequest()));
+            requestWithTypeLoan.setLeanRequest(request.getLeanRequest());
+            if (request.getIdEvaluation() != null) {
+                requestWithTypeLoan.setEvaluation(evaluationsService.findEvaluation(request.getIdEvaluation()));
+            }
 
             requestsWithTypeLoan.add(requestWithTypeLoan);
         }
         return requestsWithTypeLoan;
     }
 
-    public RequestsEntity updateStateRequest(Integer idRequest, String stateRequest) {
+    public RequestsEntity updateRequest(Integer idRequest, String stateRequest, Integer idEvaluation) {
         RequestsEntity request = requestsRepository.findById(idRequest).orElse(null);
         if (request == null) {
             return null;
         }
         request.setStateRequest(stateRequest);
+        if (idEvaluation != null){
+            request.setIdEvaluation(idEvaluation);
+        }
         return requestsRepository.save(request);
     }
 

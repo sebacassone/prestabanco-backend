@@ -20,10 +20,11 @@ public class EvaluationsController {
     @PostMapping("/make-evaluation")
     public ResponseEntity<EvaluationsEntity> makeEvaluation(@RequestBody Map<String, Object> JsonMap) {
         try {
+            System.out.println(JsonMap);
             EvaluationsEntity response = evaluationsService.makeEvaluation(
                     (Integer) JsonMap.get("idUser"),
-                    functions.transformIntegertoFloat((Integer) JsonMap.get("quotaLoan")),
-                    functions.transformIntegertoFloat((Integer) JsonMap.get("maximumAmount")),
+                    (Double) JsonMap.get("quotaLoan"),
+                    functions.transformIntegertoDouble((Integer) JsonMap.get("maximumAmount")),
                     (String) JsonMap.get("typeLoan")
             );
             return ResponseEntity.ok(response);

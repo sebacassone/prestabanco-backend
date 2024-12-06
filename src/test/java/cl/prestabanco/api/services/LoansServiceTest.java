@@ -393,8 +393,8 @@ public class LoansServiceTest {
         String typeLoan = "Primera Vivienda";
 
         // When
-        Boolean result1 = loansService.maximumFinancingAmount(typeLoan, 0f);
-        Boolean result2 = loansService.maximumFinancingAmount(typeLoan, -0.1f);
+        Boolean result1 = loansService.maximumFinancingAmount(typeLoan, 0.0);
+        Boolean result2 = loansService.maximumFinancingAmount(typeLoan, -0.1);
 
         // Then
         assertThat(result1).isFalse();
@@ -407,7 +407,7 @@ public class LoansServiceTest {
         String typeLoan = "Primera Vivienda";
 
         // When
-        Boolean result = loansService.maximumFinancingAmount(typeLoan, 1.1f);
+        Boolean result = loansService.maximumFinancingAmount(typeLoan, 1.1);
 
         // Then
         assertThat(result).isFalse();
@@ -417,7 +417,7 @@ public class LoansServiceTest {
     void whenAmountPercentageIsValidAndTypeLoanIsPrimeraVivienda_thenReturnTrue() {
         // Given
         String typeLoan = "Primera Vivienda";
-        Float amountPercentage = 0.75f;
+        Double amountPercentage = 0.75;
 
         // When
         Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
@@ -430,7 +430,7 @@ public class LoansServiceTest {
     void whenAmountPercentageIsGreaterThanMaximumForPrimeraVivienda_thenReturnFalse() {
         // Given
         String typeLoan = "Primera Vivienda";
-        Float amountPercentage = 0.85f;
+        Double amountPercentage = 0.85;
 
         // When
         Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
@@ -443,7 +443,7 @@ public class LoansServiceTest {
     void whenAmountPercentageIsValidAndTypeLoanIsSegundaVivienda_thenReturnTrue() {
         // Given
         String typeLoan = "Segunda Vivienda";
-        Float amountPercentage = 0.65f;
+        Double amountPercentage = 0.65;
 
         // When
         Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
@@ -456,7 +456,7 @@ public class LoansServiceTest {
     void whenAmountPercentageIsGreaterThanMaximumForSegundaVivienda_thenReturnFalse() {
         // Given
         String typeLoan = "Segunda Vivienda";
-        Float amountPercentage = 0.75f;
+        Double amountPercentage = 0.75;
 
         // When
         Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
@@ -469,7 +469,7 @@ public class LoansServiceTest {
     void whenAmountPercentageIsValidAndTypeLoanIsPropiedadesComerciales_thenReturnTrue() {
         // Given
         String typeLoan = "Propiedades Comerciales";
-        Float amountPercentage = 0.55f;
+        Double amountPercentage = 0.55;
 
         // When
         Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
@@ -482,7 +482,7 @@ public class LoansServiceTest {
     void whenAmountPercentageIsGreaterThanMaximumForPropiedadesComerciales_thenReturnFalse() {
         // Given
         String typeLoan = "Propiedades Comerciales";
-        Float amountPercentage = 0.65f;
+        Double amountPercentage = 0.65;
 
         // When
         Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
@@ -495,7 +495,7 @@ public class LoansServiceTest {
     void whenAmountPercentageIsValidAndTypeLoanIsRemodelacion_thenReturnTrue() {
         // Given
         String typeLoan = "Remodelación";
-        Float amountPercentage = 0.45f;
+        Double amountPercentage = 0.45;
 
         // When
         Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
@@ -508,7 +508,7 @@ public class LoansServiceTest {
     void whenAmountPercentageIsGreaterThanMaximumForRemodelacion_thenReturnFalse() {
         // Given
         String typeLoan = "Remodelación";
-        Float amountPercentage = 0.55f;
+        Double amountPercentage = 0.55;
 
         // When
         Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);
@@ -521,7 +521,7 @@ public class LoansServiceTest {
     void whenTypeLoanIsInvalid_thenReturnFalse() {
         // Given
         String typeLoan = "Personal";
-        Float amountPercentage = 0.5f;
+        Double amountPercentage = 0.5;
 
         // When
         Boolean result = loansService.maximumFinancingAmount(typeLoan, amountPercentage);

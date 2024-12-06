@@ -41,9 +41,9 @@ public class IncomesController {
     }
 
     @GetMapping("/avarage-salary/{idUser}")
-    public ResponseEntity<Float> getAvarageSalary(@PathVariable Integer idUser) {
+    public ResponseEntity<Double> getAvarageSalary(@PathVariable Integer idUser) {
         try {
-            Float response = incomesService.avarageSalary(idUser);
+            Double response = incomesService.avarageSalary(idUser);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             e.printStackTrace();
