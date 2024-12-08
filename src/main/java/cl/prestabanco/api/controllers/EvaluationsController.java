@@ -20,11 +20,18 @@ public class EvaluationsController {
     @PostMapping("/make-evaluation")
     public ResponseEntity<EvaluationsEntity> makeEvaluation(@RequestBody Map<String, Object> JsonMap) {
         try {
-            System.out.println(JsonMap);
+            Double quotaLoan = JsonMap.get("quotaLoan") instanceof Number
+                    ? Double.valueOf(JsonMap.get("quotaLoan").toString())
+                    : 0.0;
+
+            Double maximumAmount = JsonMap.get("maximumAmount") instanceof Number
+                    ? Double.valueOf(JsonMap.get("maximumAmount").toString())
+                    : 0.0;
+
             EvaluationsEntity response = evaluationsService.makeEvaluation(
                     (Integer) JsonMap.get("idUser"),
-                    (Double) JsonMap.get("quotaLoan"),
-                    functions.transformIntegertoDouble((Integer) JsonMap.get("maximumAmount")),
+                    quotaLoan,
+                    maximumAmount,
                     (String) JsonMap.get("typeLoan")
             );
             return ResponseEntity.ok(response);
