@@ -20,15 +20,19 @@ public class DocumentsEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Integer idDocument;
+
     @Column(nullable = false)
-    private String urlDocument;
+    private Integer idRequest;
+
+    @Column(nullable = false)
+    private String fileName;
+
+    @Lob
+    @Column(nullable = false)
+    @Basic(fetch = FetchType.LAZY)
+    private byte[] fileContent;
+
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date uploadDateDocument;
-
-    // Foreign Key
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "idRequest")
-    private RequestsEntity requestsDocument;
 }
