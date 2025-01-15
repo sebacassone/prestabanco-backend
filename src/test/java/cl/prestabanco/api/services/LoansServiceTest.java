@@ -334,7 +334,7 @@ public class LoansServiceTest {
         // Given
         LoansEntity loan = new LoansEntity();
         loan.setAmountLoan(100000);
-        loan.setTypeLoan("Remodalación");
+        loan.setTypeLoan("Remodelación");
         loan.setNumberOfPaymentsLoan(180); // 180 pagos (15 años)
 
         // When

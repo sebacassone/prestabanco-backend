@@ -41,14 +41,9 @@ public class RequestsService {
 
     }
 
-    public RequestsEntity getRequestById(Integer idRequest) {
-        return requestsRepository.findById(idRequest).orElse(null);
-    }
-
     public List<RequestsWithTypeLoan> getAllRequests() {
         List<RequestsEntity> requests = requestsRepository.findAll();
-        List<RequestsWithTypeLoan> requestsWithTypeLoans = getRequestsEntities(requests);
-        return requestsWithTypeLoans;
+        return getRequestsEntities(requests);
     }
 
     private List<RequestsWithTypeLoan> getRequestsEntities(List<RequestsEntity> requests) {
@@ -63,7 +58,7 @@ public class RequestsService {
                 case "Primera Vivienda" -> new String[]{"Comprobante de Ingresos", "Certificado de Avalúo", "Historial crediticio"};
                 case "Segunda Vivienda" -> new String[]{"Comprobante de Ingresos", "Certificado de Avalúo", "Historial crediticio", "Escritura de primera propiedad"};
                 case "Propiedades Comerciales" -> new String[]{"Estado financiero del negocio", "Comprobante de ingresos", "Certificado de Avalúo", "Plan de negocios"};
-                case "Remodalación" -> new String[]{"Comprobante de Ingresos", "Presupuesto de la remodelación", "Certificado de Avalúo Actualizado"};
+                case "Remodelación" -> new String[]{"Comprobante de Ingresos", "Presupuesto de la remodelación", "Certificado de Avalúo Actualizado"};
                 default -> new String[0];
             };
             requestWithTypeLoan.setDocumentsRequired(DocumentsRequired);

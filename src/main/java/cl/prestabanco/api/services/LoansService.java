@@ -36,7 +36,7 @@ public class LoansService {
             case "Primera Vivienda" -> 0.035f;
             case "Segunda Vivienda" -> 0.04f;
             case "Propiedades Comerciales" -> 0.05f;
-            case "Remodalación" -> 0.045f;
+            case "Remodelación" -> 0.045f;
             default -> 0.00f;
         };
 
@@ -75,7 +75,6 @@ public class LoansService {
      * Method to calculate the maximum financing amount
      * @param typeLoan - Type of loan
      * @param amountPercentage - Amount percentage
-     * @return
      */
     public Boolean maximumFinancingAmount(String typeLoan, Double amountPercentage) {
         Double maximumAmountPercentage = switch (typeLoan) {

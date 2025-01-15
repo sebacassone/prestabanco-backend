@@ -4,7 +4,6 @@ import cl.prestabanco.api.DTOs.RequestsWithTypeLoan;
 import cl.prestabanco.api.models.RequestsEntity;
 import cl.prestabanco.api.models.LoansEntity;
 import cl.prestabanco.api.models.UsersEntity;
-import cl.prestabanco.api.models.EvaluationsEntity;
 import cl.prestabanco.api.repositories.RequestsRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -36,9 +35,6 @@ public class RequestsServiceTest {
     @MockBean
     private LoansService loansService;
 
-    @MockBean
-    private EvaluationsService evaluationsService;
-
     @Autowired
     private RequestsService requestsService;
 
@@ -46,8 +42,6 @@ public class RequestsServiceTest {
     private UsersEntity user;
     @MockBean
     private LoansEntity loan;
-    @MockBean
-    private EvaluationsEntity evaluation;
 
     @BeforeAll
     public static void setup() {
@@ -331,7 +325,7 @@ public class RequestsServiceTest {
         loan1.setTypeLoan("Primera Vivienda");
         request1.setLeanRequest(loan1);
 
-        List<RequestsEntity> requests = Arrays.asList(request1);
+        List<RequestsEntity> requests = List.of(request1);
         when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
 
         // When
@@ -360,7 +354,7 @@ public class RequestsServiceTest {
         loan1.setTypeLoan("Segunda Vivienda");
         request1.setLeanRequest(loan1);
 
-        List<RequestsEntity> requests = Arrays.asList(request1);
+        List<RequestsEntity> requests = List.of(request1);
         when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
 
         // When
@@ -389,7 +383,7 @@ public class RequestsServiceTest {
         loan1.setTypeLoan("Propiedades Comerciales");
         request1.setLeanRequest(loan1);
 
-        List<RequestsEntity> requests = Arrays.asList(request1);
+        List<RequestsEntity> requests = List.of(request1);
         when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
 
         // When
@@ -415,10 +409,10 @@ public class RequestsServiceTest {
         request1.setIdRequest(1);
         request1.setStateRequest("PENDING");
         LoansEntity loan1 = new LoansEntity();
-        loan1.setTypeLoan("Remodalación");
+        loan1.setTypeLoan("Remodelación");
         request1.setLeanRequest(loan1);
 
-        List<RequestsEntity> requests = Arrays.asList(request1);
+        List<RequestsEntity> requests = List.of(request1);
         when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
 
         // When
@@ -447,7 +441,7 @@ public class RequestsServiceTest {
         loan.setTypeLoan("Desconocido");
         request.setLeanRequest(loan);
 
-        List<RequestsEntity> requests = Arrays.asList(request);
+        List<RequestsEntity> requests = List.of(request);
         when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(requests);
 
         // When
@@ -463,7 +457,7 @@ public class RequestsServiceTest {
         // Given: User exists but no requests associated
         Integer idUser = 1;
         when(usersService.findUser(idUser)).thenReturn(user);
-        when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(Arrays.asList());
+        when(requestsRepository.findRequestsByIdUser(idUser)).thenReturn(List.of());
 
         // When
         List<RequestsWithTypeLoan> result = requestsService.getRequestByIdUser(idUser);

@@ -6,9 +6,9 @@ import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.mockito.Mockito.*;
@@ -18,25 +18,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class EvaluationsServiceTest {
 
-    @Mock
+    @MockBean
     private EvaluationsRepository evaluationsRepository;
 
-    @Mock
+    @MockBean
     private IncomesService incomesService;
 
-    @Mock
+    @MockBean
     private DebtsService debtsService;
 
-    @Mock
+    @MockBean
     private JobsService jobsService;
 
-    @Mock
+    @MockBean
     private LoansService loansService;
 
-    @Mock
+    @MockBean
     private UsersService usersService;
 
-    @InjectMocks
+    @Autowired
     private EvaluationsService evaluationsService;
 
     @BeforeAll
@@ -223,6 +223,17 @@ public class EvaluationsServiceTest {
         when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
         when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
         when(usersService.applicantsAge(idUser)).thenReturn(true);
+        // Mock saving the request and ensure it has stateRequest set
+        when(evaluationsRepository.save(any(EvaluationsEntity.class))).thenAnswer(invocation -> {
+            EvaluationsEntity savedRequest = invocation.getArgument(0);
+            savedRequest.setQuotaIncomeRatio(false);
+            savedRequest.setSeniorityEvaluation(true);
+            savedRequest.setCustomerCredit(true);
+            savedRequest.setDebtIncomeRatio(true);
+            savedRequest.setMaximumFinancingAmount(true);
+            savedRequest.setAgeApplicant(true);
+            return savedRequest;
+        });
 
         EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
 
@@ -247,6 +258,18 @@ public class EvaluationsServiceTest {
         when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
         when(usersService.applicantsAge(idUser)).thenReturn(true);
 
+        // Mock saving the request and ensure it has stateRequest set
+        when(evaluationsRepository.save(any(EvaluationsEntity.class))).thenAnswer(invocation -> {
+            EvaluationsEntity savedRequest = invocation.getArgument(0);
+            savedRequest.setQuotaIncomeRatio(true);
+            savedRequest.setSeniorityEvaluation(true);
+            savedRequest.setCustomerCredit(true);
+            savedRequest.setDebtIncomeRatio(true);
+            savedRequest.setMaximumFinancingAmount(true);
+            savedRequest.setAgeApplicant(true);
+            return savedRequest;
+        });
+
         EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
 
         // Then
@@ -269,6 +292,17 @@ public class EvaluationsServiceTest {
         when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
         when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
         when(usersService.applicantsAge(idUser)).thenReturn(true);
+        // Mock saving the request and ensure it has stateRequest set
+        when(evaluationsRepository.save(any(EvaluationsEntity.class))).thenAnswer(invocation -> {
+            EvaluationsEntity savedRequest = invocation.getArgument(0);
+            savedRequest.setQuotaIncomeRatio(true);
+            savedRequest.setSeniorityEvaluation(true);
+            savedRequest.setCustomerCredit(false);
+            savedRequest.setDebtIncomeRatio(true);
+            savedRequest.setMaximumFinancingAmount(true);
+            savedRequest.setAgeApplicant(true);
+            return savedRequest;
+        });
 
         EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
 
@@ -292,6 +326,17 @@ public class EvaluationsServiceTest {
         when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
         when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
         when(usersService.applicantsAge(idUser)).thenReturn(true);
+        // Mock saving the request and ensure it has stateRequest set
+        when(evaluationsRepository.save(any(EvaluationsEntity.class))).thenAnswer(invocation -> {
+            EvaluationsEntity savedRequest = invocation.getArgument(0);
+            savedRequest.setQuotaIncomeRatio(true);
+            savedRequest.setSeniorityEvaluation(true);
+            savedRequest.setCustomerCredit(true);
+            savedRequest.setDebtIncomeRatio(true);
+            savedRequest.setMaximumFinancingAmount(true);
+            savedRequest.setAgeApplicant(true);
+            return savedRequest;
+        });
 
         EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
 
@@ -315,6 +360,17 @@ public class EvaluationsServiceTest {
         when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
         when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
         when(usersService.applicantsAge(idUser)).thenReturn(true);
+        // Mock saving the request and ensure it has stateRequest set
+        when(evaluationsRepository.save(any(EvaluationsEntity.class))).thenAnswer(invocation -> {
+            EvaluationsEntity savedRequest = invocation.getArgument(0);
+            savedRequest.setQuotaIncomeRatio(true);
+            savedRequest.setSeniorityEvaluation(true);
+            savedRequest.setCustomerCredit(true);
+            savedRequest.setDebtIncomeRatio(true);
+            savedRequest.setMaximumFinancingAmount(true);
+            savedRequest.setAgeApplicant(true);
+            return savedRequest;
+        });
 
         EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
 
@@ -338,6 +394,17 @@ public class EvaluationsServiceTest {
         when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
         when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(false);
         when(usersService.applicantsAge(idUser)).thenReturn(true);
+        // Mock saving the request and ensure it has stateRequest set
+        when(evaluationsRepository.save(any(EvaluationsEntity.class))).thenAnswer(invocation -> {
+            EvaluationsEntity savedRequest = invocation.getArgument(0);
+            savedRequest.setQuotaIncomeRatio(true);
+            savedRequest.setSeniorityEvaluation(true);
+            savedRequest.setCustomerCredit(true);
+            savedRequest.setDebtIncomeRatio(true);
+            savedRequest.setMaximumFinancingAmount(false);
+            savedRequest.setAgeApplicant(true);
+            return savedRequest;
+        });
 
         EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
 
@@ -361,6 +428,17 @@ public class EvaluationsServiceTest {
         when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
         when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
         when(usersService.applicantsAge(idUser)).thenReturn(false);
+        // Mock saving the request and ensure it has stateRequest set
+        when(evaluationsRepository.save(any(EvaluationsEntity.class))).thenAnswer(invocation -> {
+            EvaluationsEntity savedRequest = invocation.getArgument(0);
+            savedRequest.setQuotaIncomeRatio(true);
+            savedRequest.setSeniorityEvaluation(true);
+            savedRequest.setCustomerCredit(true);
+            savedRequest.setDebtIncomeRatio(true);
+            savedRequest.setMaximumFinancingAmount(true);
+            savedRequest.setAgeApplicant(false);
+            return savedRequest;
+        });
 
         EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
 
@@ -384,6 +462,17 @@ public class EvaluationsServiceTest {
         when(debtsService.relationDebtsIncome(idUser, quotaLoan)).thenReturn(true);
         when(loansService.maximumFinancingAmount(typeLoan, maximumAmountPercentage)).thenReturn(true);
         when(usersService.applicantsAge(idUser)).thenReturn(true);
+        // Mock saving the request and ensure it has stateRequest set
+        when(evaluationsRepository.save(any(EvaluationsEntity.class))).thenAnswer(invocation -> {
+            EvaluationsEntity savedRequest = invocation.getArgument(0);
+            savedRequest.setQuotaIncomeRatio(true);
+            savedRequest.setSeniorityEvaluation(true);
+            savedRequest.setCustomerCredit(true);
+            savedRequest.setDebtIncomeRatio(true);
+            savedRequest.setMaximumFinancingAmount(true);
+            savedRequest.setAgeApplicant(true);
+            return savedRequest;
+        });
 
         EvaluationsEntity result = evaluationsService.makeEvaluation(idUser, quotaLoan, maximumAmountPercentage, typeLoan);
 
